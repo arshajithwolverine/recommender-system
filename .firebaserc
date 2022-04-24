@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "recommender-system-674fd"
+  },
+  "targets": {
+    "recommender-system-674fd": {
+      "hosting": {
+        "main": [
+          "mtech-recommender-system"
+        ]
+      }
+    }
+  }
+}

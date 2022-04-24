@@ -1,0 +1,594 @@
+<!--
+=========================================================
+* Argon Dashboard 2 - v2.0.2
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/argon-dashboard
+* Copyright 2022 Creative Tim (https://www.creative-tim.com)
+* Licensed under MIT (https://www.creative-tim.com/license)
+* Coded by Creative Tim
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="./assets/img/apple-icon.png">
+  <link rel="icon" type="image/png" href="./assets/img/favicon.png">
+  <title>
+    Recommender System
+  </title>
+  <!--     Fonts and icons     -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+  <!-- Nucleo Icons -->
+  <link href="./assets/css/nucleo-icons.css" rel="stylesheet" />
+  <link href="./assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <link href="./assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- CSS Files -->
+  <link id="pagestyle" href="./assets/css/argon-dashboard.css?v=2.0.2" rel="stylesheet" />
+
+  <!-- Firebase scripts -->
+  <script defer src="/__/firebase/7.7.0/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/7.7.0/firebase-auth.js"></script>
+    <script defer src="/__/firebase/7.7.0/firebase-storage.js"></script>
+    <script defer src="/__/firebase/7.7.0/firebase-firestore.js"></script>
+
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js?useEmulator=false"></script>
+</head>
+
+<body class="g-sidenav-show   bg-gray-100">
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+            const loadEl = document.querySelector('#load');
+            // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+            // // The Firebase SDK is initialized and available here!
+            //
+            // firebase.auth().onAuthStateChanged(user => { });
+            // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
+            // firebase.firestore().doc('/foo/bar').get().then(() => { });
+            // firebase.functions().httpsCallable('yourFunction')().then(() => { });
+            // firebase.messaging().requestPermission().then(() => { });
+            // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+            // firebase.analytics(); // call to activate
+            // firebase.analytics().logEvent('tutorial_completed');
+            // firebase.performance(); // call to activate
+            //
+            // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+
+            app = firebase.app();
+            db = firebase.firestore();
+            console.log(app);
+            console.log(firebase.auth().currentUser)
+            firebase.auth().onAuthStateChanged(async function (user) {
+                if (user) {
+                    document.getElementById('the-body').style.display = 'block';
+                    const userData = await db.collection('Users').doc(user.uid).get();
+                    // document.getElementById('user-name').innerHTML = userData.data().Name;
+                    document.getElementById('HeadingID').innerHTML = `Welcome ${userData.data().Name}!`;
+                    showPost(true, null);
+                } else {
+                    console.log("not logged")
+                    location.replace('/arshuPages/sign-in.html');
+                }
+            })
+
+            //dark mode
+  const body = document.getElementsByTagName('body')[0];
+  const hr = document.querySelectorAll('div:not(.sidenav) > hr');
+  const sidebar = document.querySelector('.sidenav');
+  const sidebarWhite = document.querySelectorAll('.sidenav.bg-white');
+  const hr_card = document.querySelectorAll('div:not(.bg-gradient-dark) hr');
+  const text_btn = document.querySelectorAll('button:not(.btn) > .text-dark');
+  const text_span = document.querySelectorAll('span.text-dark, .breadcrumb .text-dark');
+  const text_span_white = document.querySelectorAll('span.text-white');
+  const text_strong = document.querySelectorAll('strong.text-dark');
+  const text_strong_white = document.querySelectorAll('strong.text-white');
+  const text_nav_link = document.querySelectorAll('a.nav-link.text-dark');
+  const secondary = document.querySelectorAll('.text-secondary');
+  const bg_gray_100 = document.querySelectorAll('.bg-gray-100');
+  const bg_gray_600 = document.querySelectorAll('.bg-gray-600');
+  const btn_text_dark = document.querySelectorAll('.btn.btn-link.text-dark, .btn .ni.text-dark');
+  const btn_text_white = document.querySelectorAll('.btn.btn-link.text-white, .btn .ni.text-white');
+  const card_border = document.querySelectorAll('.card.border');
+  const card_border_dark = document.querySelectorAll('.card.border.border-dark');
+  const svg = document.querySelectorAll('g');
+  const navbarBrand = document.querySelector('.navbar-brand-img');
+  const navbarBrandImg = navbarBrand.src;
+  const navLinks = document.querySelectorAll('.navbar-main .nav-link, .navbar-main .breadcrumb-item, .navbar-main .breadcrumb-item a, .navbar-main h6');
+  const cardNavLinksIcons = document.querySelectorAll('.card .nav .nav-link i');
+  const cardNavSpan = document.querySelectorAll('.card .nav .nav-link span');
+
+
+    body.classList.add('dark-version');
+    if (navbarBrandImg.includes('logo-ct-dark.png')) {
+      var navbarBrandImgNew = navbarBrandImg.replace("logo-ct-dark", "logo-ct");
+      navbarBrand.src = navbarBrandImgNew;
+    }
+    for (var i = 0; i < cardNavLinksIcons.length; i++) {
+      if (cardNavLinksIcons[i].classList.contains('text-dark')) {
+        cardNavLinksIcons[i].classList.remove('text-dark');
+        cardNavLinksIcons[i].classList.add('text-white');
+      }
+    }
+    for (var i = 0; i < cardNavSpan.length; i++) {
+      if (cardNavSpan[i].classList.contains('text-sm')) {
+        cardNavSpan[i].classList.add('text-white');
+      }
+    }
+    for (var i = 0; i < hr.length; i++) {
+      if (hr[i].classList.contains('dark')) {
+        hr[i].classList.remove('dark');
+        hr[i].classList.add('light');
+      }
+    }
+    for (var i = 0; i < hr_card.length; i++) {
+      if (hr_card[i].classList.contains('dark')) {
+        hr_card[i].classList.remove('dark');
+        hr_card[i].classList.add('light');
+      }
+    }
+    for (var i = 0; i < text_btn.length; i++) {
+      if (text_btn[i].classList.contains('text-dark')) {
+        text_btn[i].classList.remove('text-dark');
+        text_btn[i].classList.add('text-white');
+      }
+    }
+    for (var i = 0; i < text_span.length; i++) {
+      if (text_span[i].classList.contains('text-dark')) {
+        text_span[i].classList.remove('text-dark');
+        text_span[i].classList.add('text-white');
+      }
+    }
+    for (var i = 0; i < text_strong.length; i++) {
+      if (text_strong[i].classList.contains('text-dark')) {
+        text_strong[i].classList.remove('text-dark');
+        text_strong[i].classList.add('text-white');
+      }
+    }
+    for (var i = 0; i < text_nav_link.length; i++) {
+      if (text_nav_link[i].classList.contains('text-dark')) {
+        text_nav_link[i].classList.remove('text-dark');
+        text_nav_link[i].classList.add('text-white');
+      }
+    }
+    for (var i = 0; i < secondary.length; i++) {
+      if (secondary[i].classList.contains('text-secondary')) {
+        secondary[i].classList.remove('text-secondary');
+        secondary[i].classList.add('text-white');
+        secondary[i].classList.add('opacity-8');
+      }
+    }
+    for (var i = 0; i < bg_gray_100.length; i++) {
+      if (bg_gray_100[i].classList.contains('bg-gray-100')) {
+        bg_gray_100[i].classList.remove('bg-gray-100');
+        bg_gray_100[i].classList.add('bg-gray-600');
+      }
+    }
+    for (var i = 0; i < btn_text_dark.length; i++) {
+      btn_text_dark[i].classList.remove('text-dark');
+      btn_text_dark[i].classList.add('text-white');
+    }
+    for (var i = 0; i < sidebarWhite.length; i++) {
+      sidebarWhite[i].classList.remove('bg-white');
+    }
+    for (var i = 0; i < svg.length; i++) {
+      if (svg[i].hasAttribute('fill')) {
+        svg[i].setAttribute('fill', '#fff');
+      }
+    }
+    for (var i = 0; i < card_border.length; i++) {
+      card_border[i].classList.add('border-dark');
+    }
+    document.getElementById('dark-version').setAttribute("checked", "true");
+        });
+    // end-dark mode
+    function logout(){
+      console.log('Log Out');
+      firebase.auth().signOut();
+    }
+    </script>
+
+
+
+  <div class="min-height-300 bg-primary position-absolute w-100"></div>
+  <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 " id="sidenav-main">
+    <div class="sidenav-header">
+      <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
+      <a class="navbar-brand m-0" href="index.html" target="_blank">
+        <img src="./assets/img/logo-ct-dark.png" class="navbar-brand-img h-100" alt="main_logo">
+        <span class="ms-1 font-weight-bold">Recommender System</span>
+      </a>
+    </div>
+    <hr class="horizontal dark mt-0">
+    <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link " href="index.html">
+            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Movies</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="index.html">
+            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Trending</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="index.html">
+            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Watch List</span>
+          </a>
+        </li>
+        
+        
+        <li class="nav-item mt-3">
+          <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account pages</h6>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="index.html">
+            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Account</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </aside>
+  <main class="main-content position-relative border-radius-lg ">
+    <!-- Navbar -->
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl " id="navbarBlur" data-scroll="false">
+      <div class="container-fluid py-1 px-3">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white" href="javascript:;">Pages</a></li>
+            <li class="breadcrumb-item text-sm text-white active" aria-current="page">Movies</li>
+          </ol>
+          <h6 class="font-weight-bolder text-white mb-0">Movies</h6>
+        </nav>
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+            <div class="input-group">
+              <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
+              <input type="text" class="form-control" placeholder="Type here...">
+            </div>
+          </div>
+          <ul class="navbar-nav  justify-content-end">
+            <li class="nav-item d-xl-none ps-3 pe-0 d-flex align-items-center">
+              <a href="javascript:;" class="nav-link text-white p-0">
+                <a href="javascript:;" class="nav-link text-white p-0" id="iconNavbarSidenav">
+                  <div class="sidenav-toggler-inner">
+                    <i class="sidenav-toggler-line bg-white"></i>
+                    <i class="sidenav-toggler-line bg-white"></i>
+                    <i class="sidenav-toggler-line bg-white"></i>
+                  </div>
+                </a>
+              </a>
+            </li>
+            <li class="nav-item px-3 d-flex align-items-center">
+              <a href="javascript:;" class="nav-link text-white p-0">
+                <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- End Navbar -->
+    <div class="container-fluid py-4">
+      <div class="row">
+
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+            <div class="card-header p-0 mx-3 mt-3 position-relative z-index-1">
+              <a href="javascript:;" class="d-block">
+                <img src="./assets/img/minnal_murali.jpg" class="img-fluid border-radius-lg">
+              </a>
+            </div>
+            <div class="card-body pt-2">
+              <span class="text-gradient text-primary text-uppercase text-xs font-weight-bold my-2">Movie</span>
+              <a href="javascript:;" class="card-title h5 d-block text-darker">
+                Minnal Murali
+              </a>
+              <p class="card-description mb-4">
+                Jaison, a young tailor, gains superpowers after being struck by lightning. However, he must thwart the evil intentions of an unexpected adversary to become the superhero that his rural village needs.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+            <div class="card-header p-0 mx-3 mt-3 position-relative z-index-1">
+              <a href="javascript:;" class="d-block">
+                <img src="./assets/img/minnal_murali.jpg" class="img-fluid border-radius-lg">
+              </a>
+            </div>
+            <div class="card-body pt-2">
+              <span class="text-gradient text-primary text-uppercase text-xs font-weight-bold my-2">Movie</span>
+              <a href="javascript:;" class="card-title h5 d-block text-darker">
+                Minnal Murali
+              </a>
+              <p class="card-description mb-4">
+                Jaison, a young tailor, gains superpowers after being struck by lightning. However, he must thwart the evil intentions of an unexpected adversary to become the superhero that his rural village needs.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+            <div class="card-header p-0 mx-3 mt-3 position-relative z-index-1">
+              <a href="javascript:;" class="d-block">
+                <img src="./assets/img/minnal_murali.jpg" class="img-fluid border-radius-lg">
+              </a>
+            </div>
+            <div class="card-body pt-2">
+              <span class="text-gradient text-primary text-uppercase text-xs font-weight-bold my-2">Movie</span>
+              <a href="javascript:;" class="card-title h5 d-block text-darker">
+                Minnal Murali
+              </a>
+              <p class="card-description mb-4">
+                Jaison, a young tailor, gains superpowers after being struck by lightning. However, he must thwart the evil intentions of an unexpected adversary to become the superhero that his rural village needs.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+            <div class="card-header p-0 mx-3 mt-3 position-relative z-index-1">
+              <a href="javascript:;" class="d-block">
+                <img src="./assets/img/minnal_murali.jpg" class="img-fluid border-radius-lg">
+              </a>
+            </div>
+            <div class="card-body pt-2">
+              <span class="text-gradient text-primary text-uppercase text-xs font-weight-bold my-2">Movie</span>
+              <a href="javascript:;" class="card-title h5 d-block text-darker">
+                Minnal Murali
+              </a>
+              <p class="card-description mb-4">
+                Jaison, a young tailor, gains superpowers after being struck by lightning. However, he must thwart the evil intentions of an unexpected adversary to become the superhero that his rural village needs.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+            <div class="card-header p-0 mx-3 mt-3 position-relative z-index-1">
+              <a href="javascript:;" class="d-block">
+                <img src="./assets/img/minnal_murali.jpg" class="img-fluid border-radius-lg">
+              </a>
+            </div>
+            <div class="card-body pt-2">
+              <span class="text-gradient text-primary text-uppercase text-xs font-weight-bold my-2">Movie</span>
+              <a href="javascript:;" class="card-title h5 d-block text-darker">
+                Minnal Murali
+              </a>
+              <p class="card-description mb-4">
+                Jaison, a young tailor, gains superpowers after being struck by lightning. However, he must thwart the evil intentions of an unexpected adversary to become the superhero that his rural village needs.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+            <div class="card-header p-0 mx-3 mt-3 position-relative z-index-1">
+              <a href="javascript:;" class="d-block">
+                <img src="./assets/img/minnal_murali.jpg" class="img-fluid border-radius-lg">
+              </a>
+            </div>
+            <div class="card-body pt-2">
+              <span class="text-gradient text-primary text-uppercase text-xs font-weight-bold my-2">Movie</span>
+              <a href="javascript:;" class="card-title h5 d-block text-darker">
+                Minnal Murali
+              </a>
+              <p class="card-description mb-4">
+                Jaison, a young tailor, gains superpowers after being struck by lightning. However, he must thwart the evil intentions of an unexpected adversary to become the superhero that his rural village needs.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+            <div class="card-header p-0 mx-3 mt-3 position-relative z-index-1">
+              <a href="javascript:;" class="d-block">
+                <img src="./assets/img/minnal_murali.jpg" class="img-fluid border-radius-lg">
+              </a>
+            </div>
+            <div class="card-body pt-2">
+              <span class="text-gradient text-primary text-uppercase text-xs font-weight-bold my-2">Movie</span>
+              <a href="javascript:;" class="card-title h5 d-block text-darker">
+                Minnal Murali
+              </a>
+              <p class="card-description mb-4">
+                Jaison, a young tailor, gains superpowers after being struck by lightning. However, he must thwart the evil intentions of an unexpected adversary to become the superhero that his rural village needs.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+            <div class="card-header p-0 mx-3 mt-3 position-relative z-index-1">
+              <a href="javascript:;" class="d-block">
+                <img src="./assets/img/minnal_murali.jpg" class="img-fluid border-radius-lg">
+              </a>
+            </div>
+            <div class="card-body pt-2">
+              <span class="text-gradient text-primary text-uppercase text-xs font-weight-bold my-2">Movie</span>
+              <a href="javascript:;" class="card-title h5 d-block text-darker">
+                Minnal Murali
+              </a>
+              <p class="card-description mb-4">
+                Jaison, a young tailor, gains superpowers after being struck by lightning. However, he must thwart the evil intentions of an unexpected adversary to become the superhero that his rural village needs.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+  <div class="fixed-plugin">
+    <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
+      <i class="fa fa-cog py-2"> </i>
+    </a>
+    <div class="card shadow-lg">
+      <div class="card-header pb-0 pt-3 ">
+        <div class="float-start">
+          <h5 class="mt-3 mb-0">Settings</h5>
+          <p>Options</p>
+        </div>
+        <div class="float-end mt-4">
+          <button class="btn btn-link text-dark p-0 fixed-plugin-close-button">
+            <i class="fa fa-close"></i>
+          </button>
+        </div>
+        <!-- End Toggle Button -->
+      </div>
+      <hr class="horizontal dark my-1">
+      <button type="button" class="btn btn-secondary btn-lg w-100" style="margin-top: 15px;" onclick="logout()">Log out</button>
+      <hr class="horizontal dark my-1">
+      <div class="card-body pt-sm-3 pt-0 overflow-auto">
+        <!-- Sidebar Backgrounds -->
+        <div>
+          <h6 class="mb-0">Sidebar Colors</h6>
+        </div>
+        <a href="javascript:void(0)" class="switch-trigger background-color">
+          <div class="badge-colors my-2 text-start">
+            <span class="badge filter bg-gradient-primary active" data-color="primary" onclick="sidebarColor(this)"></span>
+            <span class="badge filter bg-gradient-dark" data-color="dark" onclick="sidebarColor(this)"></span>
+            <span class="badge filter bg-gradient-info" data-color="info" onclick="sidebarColor(this)"></span>
+            <span class="badge filter bg-gradient-success" data-color="success" onclick="sidebarColor(this)"></span>
+            <span class="badge filter bg-gradient-warning" data-color="warning" onclick="sidebarColor(this)"></span>
+            <span class="badge filter bg-gradient-danger" data-color="danger" onclick="sidebarColor(this)"></span>
+          </div>
+        </a>
+        <hr class="horizontal dark my-sm-4">
+        <div class="mt-2 mb-5 d-flex">
+          <h6 class="mb-0">Light / Dark</h6>
+          <div class="form-check form-switch ps-0 ms-auto my-auto">
+            <input class="form-check-input mt-1 ms-auto" type="checkbox" id="dark-version" onclick="darkMode(this)">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--   Core JS Files   -->
+  <script src="./assets/js/core/popper.min.js"></script>
+  <script src="./assets/js/core/bootstrap.min.js"></script>
+  <script src="./assets/js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="./assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <script src="./assets/js/plugins/chartjs.min.js"></script>
+  <script>
+    var ctx1 = document.getElementById("chart-line").getContext("2d");
+
+    var gradientStroke1 = ctx1.createLinearGradient(0, 230, 0, 50);
+
+    gradientStroke1.addColorStop(1, 'rgba(94, 114, 228, 0.2)');
+    gradientStroke1.addColorStop(0.2, 'rgba(94, 114, 228, 0.0)');
+    gradientStroke1.addColorStop(0, 'rgba(94, 114, 228, 0)');
+    new Chart(ctx1, {
+      type: "line",
+      data: {
+        labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        datasets: [{
+          label: "Mobile apps",
+          tension: 0.4,
+          borderWidth: 0,
+          pointRadius: 0,
+          borderColor: "#5e72e4",
+          backgroundColor: gradientStroke1,
+          borderWidth: 3,
+          fill: true,
+          data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
+          maxBarThickness: 6
+
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false,
+          }
+        },
+        interaction: {
+          intersect: false,
+          mode: 'index',
+        },
+        scales: {
+          y: {
+            grid: {
+              drawBorder: false,
+              display: true,
+              drawOnChartArea: true,
+              drawTicks: false,
+              borderDash: [5, 5]
+            },
+            ticks: {
+              display: true,
+              padding: 10,
+              color: '#fbfbfb',
+              font: {
+                size: 11,
+                family: "Open Sans",
+                style: 'normal',
+                lineHeight: 2
+              },
+            }
+          },
+          x: {
+            grid: {
+              drawBorder: false,
+              display: false,
+              drawOnChartArea: false,
+              drawTicks: false,
+              borderDash: [5, 5]
+            },
+            ticks: {
+              display: true,
+              color: '#ccc',
+              padding: 20,
+              font: {
+                size: 11,
+                family: "Open Sans",
+                style: 'normal',
+                lineHeight: 2
+              },
+            }
+          },
+        },
+      },
+    });
+  </script>
+  <script>
+    var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+      var options = {
+        damping: '0.5'
+      }
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+  </script>
+  <!-- Github buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="./assets/js/argon-dashboard.min.js?v=2.0.2"></script>
+</body>
+
+</html>
